@@ -1,16 +1,44 @@
 package org.example.retrovideogamesdf;
 
-public class Game {
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
+public class Game implements Serializable {
+    private Map<String, Game> games;
 
     public String gameName;
     public String publisher;
     public String gameDescription;
+
+    public Game(String gameName, String publisher, String gameDescription, String developer, GamesMachine originalGamesMachineDevelopedFor, int initialReleaseYear, String coverArtImageGame) {
+        this.gameName = gameName;
+        this.publisher = publisher;
+        this.gameDescription = gameDescription;
+        this.developer = developer;
+        this.originalGamesMachineDevelopedFor = originalGamesMachineDevelopedFor;
+        this.initialReleaseYear = initialReleaseYear;
+        this.coverArtImageGame = coverArtImageGame;
+    }
+
+    private Map<String, GamePort> gamePorts;
+
     public String developer;
     public GamesMachine originalGamesMachineDevelopedFor;
 
 
     public int initialReleaseYear;
-    public String CoverArtImageGame;
+    public String coverArtImageGame;
+    public Game nextGame;
+
+    public Game getNextGame() {
+        return nextGame;
+    }
+
+    public void setNextGame(Game nextGame) {
+        this.nextGame = nextGame;
+    }
+
 
     public String getGameName() {
         return gameName;
@@ -61,11 +89,26 @@ public class Game {
     }
 
     public String getCoverArtImageGame() {
-        return CoverArtImageGame;
+        return coverArtImageGame;
     }
 
     public void setCoverArtImageGame(String coverArtImageGame) {
-        CoverArtImageGame = coverArtImageGame;
+    }
+    public void addGamePort(GamePort gamePort) {
+        gamePorts.put(gamePort.getOriginalGame(), gamePort);
     }
 
+    public void removeGamePort(String portName) {
+        gamePorts.remove(portName);
+    }
+
+    public Map<String, GamePort> getGamePorts() {
+        return gamePorts;
+    }
+    public void removeGame() {
+        // Remove associated game ports
+        gamePorts.clear();
+    }
 }
+
+
