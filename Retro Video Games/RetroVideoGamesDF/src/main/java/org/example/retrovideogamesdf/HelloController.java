@@ -187,7 +187,7 @@ public void onDeleteGamesMachineButton(String machineName) {
     @FXML
     private void onDeleteGameButton(ActionEvent event) {
         String gameName = gameNameField.getText();
-        onDeleteGameButton(gameName);
+        onDeleteGame(gameName);
     }
 
 }
