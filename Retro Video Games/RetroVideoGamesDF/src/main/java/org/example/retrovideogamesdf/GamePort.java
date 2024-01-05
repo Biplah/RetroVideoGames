@@ -2,15 +2,18 @@ package org.example.retrovideogamesdf;
 
 public class GamePort {
 
-    public GamePort(String portDeveloper, Game originalGame, int initialReleaseYearOfGamePort) {
+
+
+    public GamesMachine newMachine;
+    public String portDeveloper;
+    public String originalGame;
+
+    public GamePort(String portDeveloper, String originalGame, int initialReleaseYearOfGamePort) {
         this.portDeveloper = portDeveloper;
         this.originalGame = originalGame;
         this.initialReleaseYearOfGamePort = initialReleaseYearOfGamePort;
     }
 
-    public GamesMachine newMachine;
-    public String portDeveloper;
-    public Game originalGame;
     public int initialReleaseYearOfGamePort;
     public GamePort nextGamePort;
 
@@ -30,12 +33,14 @@ public class GamePort {
         this.initialReleaseYearOfGamePort = initialReleaseYearOfGamePort;
     }
 
-    public String getOriginalGame() {
-        return originalGame;
+
+
+    public void setOriginalGame(String originalGame) {
+        this.originalGame = originalGame;
     }
 
-    public void setOriginalGame(Game originalGame) {
-        this.originalGame = originalGame;
+    public String getOriginalGame() {
+        return originalGame;
     }
 
     public GamesMachine getNewMachine() {
@@ -53,4 +58,5 @@ public class GamePort {
     public void setPortDeveloper(String portDeveloper) {
         this.portDeveloper = portDeveloper;
     }
+    // Delete a game port by its name
 }

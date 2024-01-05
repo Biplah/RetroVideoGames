@@ -4,11 +4,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GamePortMap<K, V>{
+public class GamePortMap<K, V> {
     private static final int INITIAL_CAPACITY = 16;
     private static final double LOAD_FACTOR = 0.75;
 
-    private List<Entry<K,V>>[] buckets;
+    private List<Entry<K, V>>[] buckets;
     private int size;
 
     public GamePortMap() {
@@ -99,35 +99,55 @@ public class GamePortMap<K, V>{
             this.key = key;
             this.value = value;
         }
-    }
-    public List<Entry<K, V>> entrySet() {
-        List<Entry<K, V>> allEntries = new ArrayList<>();
-        for (List<Entry<K, V>> bucket : buckets) {
-            if (bucket != null) {
-                allEntries.addAll(bucket);
-            }
-        }
-        return allEntries;
-    }
-    public void saveToFile(String GamePort) {
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(GamePort))) {
-            outputStream.writeObject(this);
-            System.out.println("Data saved to file: " + GamePort);
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        public V getValue() {
+            return value;
         }
     }
 
-    public static GamePortMap<?, ?> loadFromFile(String GamePortMap) {
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(GamePortMap))) {
-            Object obj = inputStream.readObject();
-            if (obj instanceof GamePortMap) {
-                System.out.println("Data loaded from file: " + GamePortMap);
-                return (GamePortMap<?, ?>) obj;
+        public List<Entry<K, V>> entrySet() {
+            List<Entry<K, V>> allEntries = new ArrayList<>();
+            for (List<Entry<K, V>> bucket : buckets) {
+                if (bucket != null) {
+                    allEntries.addAll(bucket);
+                }
             }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            return allEntries;
         }
-        return null;
+
+        public void saveToFile(String GamePort) {
+            try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(GamePort))) {
+                outputStream.writeObject(this);
+                System.out.println("Data saved to file: " + GamePort);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public static GamePortMap<?, ?> loadFromFile(String GamePortMap) {
+            try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(GamePortMap))) {
+                Object obj = inputStream.readObject();
+                if (obj instanceof GamePortMap) {
+                    System.out.println("Data loaded from file: " + GamePortMap);
+                    return (GamePortMap<?, ?>) obj;
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        public void remove(K key) {
+            int index = getIndex(key);
+            if (buckets[index] != null) {
+                List<GamePortMap.Entry<K, V>> bucket = buckets[index];
+                for (GamePortMap.Entry<K, V> entry : bucket) {
+                    if (entry.key.equals(key)) {
+                        bucket.remove(entry);
+                        size--;
+                        return;
+                    }
+                }
+            }
+        }
     }
-}

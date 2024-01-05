@@ -105,8 +105,7 @@ public class Game implements Serializable {
     public Map<String, GamePort> getGamePorts() {
         return gamePorts;
     }
-    public void removeGame() {
-        // Remove associated game ports
+    public void removeGamePorts() {
         gamePorts.clear();
     }
 }
