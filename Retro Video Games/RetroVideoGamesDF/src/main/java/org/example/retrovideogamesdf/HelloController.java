@@ -10,7 +10,6 @@ import javafx.scene.control.*;
 
 import java.util.*;
 
-import static java.lang.Integer.parseInt;
 
 
 public class HelloController {
@@ -70,26 +69,31 @@ public class HelloController {
     private TextField photoURLField;
     @FXML
     private TextField portDeveloperField;
+    @FXML
+    private TextArea gamesMachinesList;
+    @FXML
+    private TextArea gameList;
+    @FXML
+    private TextArea gamePortsList;
 
 
-    private ContextMenu contextMenu;
 
     //Search
 
 
-    private String getFieldValue(GamesMachine machine, String criteria) {
-        switch (criteria) {
-            case "Name/Title":
-                return machine.getMachineName();
-            case "Type":
-                return machine.getGameMachineType();
-            case "Year":
-                return String.valueOf(machine.getInitialLaunchYear());
-
-            default:
-                return "";
-        }
-    }
+//    private String getFieldValue(GamesMachine machine, String criteria) {
+//        switch (criteria) {
+//            case "Name/Title":
+//                return machine.getMachineName();
+//            case "Type":
+//                return machine.getGameMachineType();
+//            case "Year":
+//                return String.valueOf(machine.getInitialLaunchYear());
+//
+//            default:
+//                return "";
+//        }
+//    }
 
     //Add Buttons
     @FXML
@@ -99,16 +103,22 @@ public class HelloController {
         String gameDescription = gameDescriptionField.getText();
         String developer = developerField.getText();
         String originalGamesMachineName = originalGamesMachineDevelopedForField.getText();
-        int initialReleaseYear = parseInt(initialReleaseYearField.getText());
+        int initialReleaseYear = Integer.parseInt(initialReleaseYearField.getText());
         String coverArtImageGame = coverArtImageGameField.getText();
 
-        GamesMachine originalGamesMachine = findOrCreateGamesMachine(originalGamesMachineName);
+            GamesMachine originalGamesMachine = findOrCreateGamesMachine(originalGamesMachineName);
 
-        Game newGame = new Game(gameName, publisher, gameDescription, developer, originalGamesMachine, initialReleaseYear, coverArtImageGame);
-        gamesMap.putGames(gameName, newGame);
+            Game newGame = new Game(gameName, publisher, gameDescription, developer, originalGamesMachine, initialReleaseYear, coverArtImageGame);
+            gamesMap.putGames(gameName, newGame);
+        System.out.println("Game Name = "+newGame.getGameName() +"  Publisher = "+ newGame.getPublisher()+"  Game Description = "+ newGame.getGameDescription()+"  Developer Of Game = "+ newGame.getDeveloper()+ "  Original Machine Developed For = "+newGame.getOriginalGamesMachineDevelopedFor()+ "  Initial Release Year Of Game = "+newGame.getInitialReleaseYear()+"  Cover Art Image URl = "+ newGame.getCoverArtImageGame());
 
 
-//        clearFields();
+        gameList.setText("Game Name = "+newGame.getGameName() +"  Publisher = "+ newGame.getPublisher()+"  Game Description = "+ newGame.getGameDescription()+"  Developer Of Game = "+ newGame.getDeveloper()+ "  Original Machine Developed For = "+newGame.getOriginalGamesMachineDevelopedFor()+ "  Initial Release Year Of Game = "+newGame.getInitialReleaseYear()+"  Cover Art Image URl = "+ newGame.getCoverArtImageGame());
+
+
+
+
+        clearGameFields();
     }
     public void onAddGameMachineButton(ActionEvent actionEvent) {
         String machineName = machineNameField.getText();
@@ -116,31 +126,35 @@ public class HelloController {
         String machineDescription = machineDescriptionField.getText();
         String gameMachineType = gameMachineTypeField.getText();
         String mediaType = mediaTypeField.getText();
+
         int initialLaunchYear = Integer.parseInt(initialLaunchYearField.getText());
         double intitialRRP = Double.parseDouble(initialRRPField.getText());
         String photoURL = photoURLField.getText();
 
         GamesMachine newGamesMachine = new GamesMachine(machineName,manufacturer,machineDescription,gameMachineType,mediaType,initialLaunchYear,intitialRRP,photoURL);
 
-        System.out.println(newGamesMachine.getMachineName() + newGamesMachine.getManufacturer()+ newGamesMachine.getMachineDescription()+ newGamesMachine.getInitialLaunchYear());
+        System.out.println("Machine Name = "+newGamesMachine.getMachineName() +"  Manufacturer = "+ newGamesMachine.getManufacturer()+ "  Machine Description = "+newGamesMachine.getMachineDescription()+ "  Initial Launch Year Of Game Machine = "+newGamesMachine.getInitialLaunchYear());
 
         gamesMachineMap.putGamesMachine(machineName,newGamesMachine);
+        gamesMachinesList.setText("Machine Name = "+newGamesMachine.getMachineName() +"  Manufacturer = "+ newGamesMachine.getManufacturer()+ "  Machine Description = "+newGamesMachine.getMachineDescription()+ "  Initial Launch Year Of Game Machine = "+newGamesMachine.getInitialLaunchYear());
 
 
-//        clearFields();
+        clearGameMachineFields();
     }
     public void onAddGamePortButton(ActionEvent actionEvent) {
         String portDeveloper = portDeveloperField.getText();
         String originalGame = originalGameField.getText();
-        int initialReleaseYearOfGamePort = parseInt(initialReleaseYearField.getText());
+        int initialReleaseYearOfGamePort = Integer.parseInt((initialReleaseYearOfGamePortField.getText()));
 
 
 
             GamePort newGamePort = new GamePort(portDeveloper,originalGame, initialReleaseYearOfGamePort);
 
             gamePortMap.putGamePort(portDeveloper, newGamePort);
+            gamePortsList.setText("Port Dev = "+newGamePort.getPortDeveloper()+"  Original Game = " + newGamePort.getOriginalGame()+"  Initial Release Year = " +newGamePort.getInitialReleaseYearOfGamePort());
+        System.out.println("Port Dev = "+newGamePort.getPortDeveloper()+"  Original Game = " + newGamePort.getOriginalGame()+"  Initial Release Year = " +newGamePort.getInitialReleaseYearOfGamePort());
 
-//            clearFields();
+        clearGamePortFields();
         }
 
     @FXML
@@ -159,9 +173,8 @@ public void deleteGamesMachine(String machineName) {
     GamesMachine gamesMachine = gamesMachineMap.getGamesMachine(machineName);
 
     if (gamesMachine != null) {
-        // Remove games and associated game ports
-        for (Game game : gamesMachine.getGames().values()) {
-            gamesMachine.removeGameAndPorts(game.getGameName());
+        for (Game game : Manager.getGames().values()) {
+            Manager.removeGameAndPorts(game.getGameName());
         }
 
         // Remove the game machine
@@ -182,7 +195,7 @@ public void deleteGamesMachine(String machineName) {
         Game game = gamesMap.getGame(gameName);
 
         if (game != null) {
-            game.removeGamePorts();
+            Manager.removeGamePorts();
 
             gamesMap.remove(gameName);
         }
@@ -192,9 +205,7 @@ public void deleteGamesMachine(String machineName) {
         String originalGame = originalGameField2.getText();
 
         if (!originalGame.isEmpty()) {
-            // Delete the game port by its name
             deleteGamePort(originalGame);
-
         }
     }
     public void deleteGamePort(String originalGame) {
@@ -212,18 +223,44 @@ public void deleteGamesMachine(String machineName) {
         return gamesMachine;
     }
 
-//    private void clearFields() {
-//        gameNameField.clear();
-//        publisherField.clear();
-//        gameDescriptionField.clear();
-//        developerField.clear();
-//        originalGamesMachineDevelopedForField.clear();
-//        initialReleaseYearField.clear();
-//        coverArtImageGameField.clear();
-//    }
+    private void clearGameFields() {
+        gameNameField.clear();
+        publisherField.clear();
+        gameDescriptionField.clear();
+        developerField.clear();
+        originalGamesMachineDevelopedForField.clear();
+        initialReleaseYearField.clear();
+        coverArtImageGameField.clear();
+    }
+    private void clearGameMachineFields() {
+        machineNameField.clear();
+        manufacturerField.clear();
+        machineDescriptionField.clear();
+        gameMachineTypeField.clear();
+        mediaTypeField.clear();
+        initialLaunchYearField.clear();
+        initialRRPField.clear();
+        photoURLField.clear();
+    }private void clearGamePortFields() {
+        portDeveloperField.clear();
+        originalGameField.clear();
+        initialReleaseYearField.clear();
+    }
 
-    private void handleSortButtonClick() {
+
+    @FXML
+    private void handleSortGamesButtonClick(ActionEvent actionEvent) {
         sortGames("name", true);
+
+    }
+    @FXML
+    private void handleSortGameMachinesButtonClick(ActionEvent actionEvent) {
+        sortGameMachines("name", true);
+
+    }
+    @FXML
+    private void handleSortGamePortsButtonClick(ActionEvent actionEvent) {
+        sortGamePorts("name", true);
 
     }
 
@@ -239,7 +276,6 @@ public void deleteGamesMachine(String machineName) {
         gamesMap.sortGames();
     }
 
-    // Method to get the appropriate comparator for Games (including game ports)
     private Comparator<Game> getGameComparator(String sortBy) {
         switch (sortBy) {
             case "name":
@@ -248,15 +284,13 @@ public void deleteGamesMachine(String machineName) {
                 return Comparator.comparing(Game::getPublisher, String.CASE_INSENSITIVE_ORDER);
             case "releaseYear":
                 return Comparator.comparingInt(Game::getInitialReleaseYear);
-            // Add more cases for other sorting criteria
             default:
-                // Default sorting by name
                 return Comparator.comparing(Game::getGameName, String.CASE_INSENSITIVE_ORDER);
         }
     }
 
     public void sortGameMachines(String sortBy, boolean ascending) {
-        Comparator<Game> comparator = getGameComparator(sortBy);
+            Comparator<GamesMachine> comparator = getGameMachineComparator(sortBy);
 
         if (!ascending) {
             comparator.reversed();
@@ -265,7 +299,6 @@ public void deleteGamesMachine(String machineName) {
         gamesMachineMap.sortGameMachines();
     }
 
-    // Method to get the appropriate comparator for Games (including game ports)
     private Comparator<GamesMachine> getGameMachineComparator(String sortBy) {
         switch (sortBy) {
             case "machine name":
@@ -278,10 +311,31 @@ public void deleteGamesMachine(String machineName) {
                 return Comparator.comparing(GamesMachine::getMediaType, String.CASE_INSENSITIVE_ORDER);
             case "Initial Launch Year":
                 return Comparator.comparingInt(GamesMachine::getInitialLaunchYear);
-            // Add more cases for other sorting criteria
             default:
-                // Default sorting by name
                 return Comparator.comparing(GamesMachine::getMachineName, String.CASE_INSENSITIVE_ORDER);
+        }
+    }
+    public void sortGamePorts(String sortBy, boolean ascending) {
+        Comparator<GamePort> comparator = getGameMachinePortComparator(sortBy);
+
+        if (!ascending) {
+            comparator.reversed();
+        }
+
+        gamesMachineMap.sortGameMachines();
+    }
+
+    private Comparator<GamePort> getGameMachinePortComparator(String sortBy) {
+        switch (sortBy) {
+            case "Port Developer":
+                return Comparator.comparing(GamePort::getPortDeveloper, String.CASE_INSENSITIVE_ORDER);
+            case "Original Game":
+                return Comparator.comparing(GamePort::getOriginalGame, String.CASE_INSENSITIVE_ORDER);
+            case "Initial Release Year":
+                return Comparator.comparingInt(GamePort::getInitialReleaseYearOfGamePort);
+
+            default:
+                return Comparator.comparing(GamePort::getPortDeveloper, String.CASE_INSENSITIVE_ORDER);
         }
     }
 
@@ -351,10 +405,6 @@ public void deleteGamesMachine(String machineName) {
         return gamePort.getOriginalGame().toLowerCase().contains(searchTerm.toLowerCase());
     }
 
-
-    public static class GamesList<T> {
-
-    }
 //    @FXML
 //    private void initialize() {
 //        // Initialize your data (populate the gamesMachineMap with data)

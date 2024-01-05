@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GamesMachine {
-    private Map<String, Game> games;
+
     public String machineName;
     public String manufacturer;
     public String machineDescription;
@@ -99,41 +99,23 @@ public class GamesMachine {
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
     }
-    public void addGame(Game game) {
-        games.put(game.getGameName(), game);
+
+
+    @Override
+    public String toString() {
+        return "GamesMachine{" +
+                ", machineName='" + machineName + '\'' +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", machineDescription='" + machineDescription + '\'' +
+                ", gameMachineType='" + gameMachineType + '\'' +
+                ", mediaType='" + mediaType + '\'' +
+                ", initialLaunchYear=" + initialLaunchYear +
+                ", initialRRP=" + initialRRP +
+                ", photoURL='" + photoURL + '\'' +
+                ", nextGamesMachine=" + nextGamesMachine +
+                '}';
     }
 
-    public void removeGame(String gameName) {
-        games.remove(gameName);
-    }
-
-    // Optional: Remove associated game ports
-    public void removeGameAndPorts(String gameName) {
-        Game game = games.get(gameName);
-        if (game != null) {
-            for (GamePort gamePort : game.getGamePorts().values()) {
-                removeGamePort(gamePort.getOriginalGame());
-            }
-        }
-        removeGame(gameName);
-    }
-
-    public void addGamePort(String gameName, GamePort gamePort) {
-        Game game = games.get(gameName);
-        if (game != null) {
-            game.addGamePort(gamePort);
-        }
-    }
-
-    public void removeGamePort(String portName) {
-        for (Game game : games.values()) {
-            game.removeGamePort(portName);
-        }
-    }
-
-    public Map<String, Game> getGames() {
-        return games;
-    }
 }
 
 

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Game implements Serializable {
-    private Map<String, Game> games;
 
     public String gameName;
     public String publisher;
@@ -21,7 +20,6 @@ public class Game implements Serializable {
         this.coverArtImageGame = coverArtImageGame;
     }
 
-    private Map<String, GamePort> gamePorts;
 
     public String developer;
     public GamesMachine originalGamesMachineDevelopedFor;
@@ -94,20 +92,22 @@ public class Game implements Serializable {
 
     public void setCoverArtImageGame(String coverArtImageGame) {
     }
-    public void addGamePort(GamePort gamePort) {
-        gamePorts.put(gamePort.getOriginalGame(), gamePort);
+
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                ", gameName='" + gameName + '\'' +
+                ", publisher='" + publisher + '\'' +
+                ", gameDescription='" + gameDescription + '\'' +
+                ", developer='" + developer + '\'' +
+                ", originalGamesMachineDevelopedFor=" + originalGamesMachineDevelopedFor +
+                ", initialReleaseYear=" + initialReleaseYear +
+                ", coverArtImageGame='" + coverArtImageGame + '\'' +
+                ", nextGame=" + nextGame +
+                '}';
     }
 
-    public void removeGamePort(String portName) {
-        gamePorts.remove(portName);
-    }
-
-    public Map<String, GamePort> getGamePorts() {
-        return gamePorts;
-    }
-    public void removeGamePorts() {
-        gamePorts.clear();
-    }
 }
 
 

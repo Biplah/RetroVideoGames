@@ -51,6 +51,17 @@ public class GamePort {
         this.newMachine = newMachine;
     }
 
+    @Override
+    public String toString() {
+        return "GamePort{" +
+                "newMachine=" + newMachine +
+                ", portDeveloper='" + portDeveloper + '\'' +
+                ", originalGame='" + originalGame + '\'' +
+                ", initialReleaseYearOfGamePort=" + initialReleaseYearOfGamePort +
+                ", nextGamePort=" + nextGamePort +
+                '}';
+    }
+
     public String getPortDeveloper() {
         return portDeveloper;
     }
@@ -58,5 +69,4 @@ public class GamePort {
     public void setPortDeveloper(String portDeveloper) {
         this.portDeveloper = portDeveloper;
     }
-    // Delete a game port by its name
 }
